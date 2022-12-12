@@ -6,6 +6,10 @@ struct el{
 	char code[20];
 };
 
+char areEqual(char* s1, char* s2){
+	
+}
+
 unsigned char binToChar(char* s){
 	unsigned char c = 0;
 	for(int i = 0; i < 8; i++)c+= (s[i] - 48) *  1<<(7-i);
@@ -93,6 +97,26 @@ char* compressedStr(char* str){
 	return ans;
 }
 
+char* decompression(char* str, el* m, int k){
+	char* ans = new char[200];
+	char t[200] = "", code[20] = "";
+	int n = 0;
+	while(str[n] != '\0'){
+		strSum(t, bin(str[n]));
+		n++;
+	}
+	n = 0;
+	while(t[n] != '\0'){
+		addBack(code, t[n]);
+		for(int j = 0; j < k; j++) {
+			
+		}
+		n++;
+	}
+	
+	return ans;
+}
+
 int main() {
 	char str[200] = "123455";
 	int k = 0, m[256]={0}, len = 0;
@@ -113,7 +137,6 @@ int main() {
 		}
 	}
 	
-	
 	for(int i = 0; i < k - 1; i++){
 		char f = 1;
 		for(int j = 0; j < k - i - 1; j++){
@@ -131,14 +154,11 @@ int main() {
 	
 	for(int i = 0; i < k; i++)printf("%c - %s\n",ans[i].c, ans[i].code);
 	
+	puts(encodedStr(ans, str, k));
+	char* ii = compressedStr(encodedStr(ans, str, k));
 	int a = 0;
 	
-	char* ii = compressedStr(encodedStr(ans, str, k));
-	while(ii[a] != '\0'){
-		printf("%s\n",bin(ii[a]));
-		a++;
-	}
-	
+	puts(decompression(compressedStr(encodedStr(ans, str, k)),ans,k));
 	
 	return 0;
 }
