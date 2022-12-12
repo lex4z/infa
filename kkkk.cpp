@@ -6,6 +6,19 @@ struct el{
 	char code[20];
 };
 
+unsigned char binToChar(char* s){
+	unsigned char c = 0;
+	for(int i = 0; i < 8; i++)c+= (s[i] - 48) *  1<<(7-i);
+	return c;
+}
+
+char* bin(unsigned char c){
+	char* s = new char[9];
+	for(int i = 0; i < 8; i++) s[i] = 48 + (c>>(7-i)&1);
+	s[8]='\0';
+	return s;
+}
+
 void strSum(char* str1, char* str2){
 	int n = 0, m = 0;
 	while (str1[n]!='\0') n++;
@@ -39,7 +52,7 @@ void fano(el* a, int s, int f){
 	
 }
 
-char* result(el* n, char* str, int k){
+char* encodedStr(el* n, char* str, int k){
 	char* ans = new char[200];
 	int i = 0;
 	while(str[i] != '\0'){
@@ -51,7 +64,32 @@ char* result(el* n, char* str, int k){
 		}
 		i++;
 	}
+	for(int j = 0; j < k; j++) {
+		if(n[j].c == '\0'){
+			strSum(ans, n[j].code);
+			break;
+		}
+	}
+	addBack(ans, '\0');
+	return ans;
+}
+
+char* compressedStr(char* str){
+	int len = 0;
+	char t[8]="";
+	while(str[len]!='\0') len++;
+	char* ans = new char[len/8+2];
 	
+	for(int i = 0; i < len/8 + 1; i++){
+		char f = 0;
+		for(int j = 0; j < 8; j++){
+			if(str[i*8+j] == '\0') f = 1;
+			t[j] = f ? '0':str[i*8+j];
+		} 
+		addBack(ans, binToChar(t));
+	}
+
+	ans[len/8+1]='\0';
 	return ans;
 }
 
@@ -62,6 +100,8 @@ int main() {
 		m[str[len]]++;
 		len++;
 	}
+	m[0]++;
+	
 	for(int i = 0; i < 256; i++)if(m[i] != 0) k++;
 	el* ans = new el[k];
 	int h = 0;
@@ -71,7 +111,9 @@ int main() {
 			ans[h].n = m[i];
 			h++;
 		}
-	}	
+	}
+	
+	
 	for(int i = 0; i < k - 1; i++){
 		char f = 1;
 		for(int j = 0; j < k - i - 1; j++){
@@ -84,12 +126,18 @@ int main() {
 		}
 		if(f) break;
 	}
+	
 	fano(ans,0,k);
 	
-	for(int i = 0; i < k; i++){
-		printf("%c - %s\n",ans[i].c, ans[i].code);
+	for(int i = 0; i < k; i++)printf("%c - %s\n",ans[i].c, ans[i].code);
+	
+	int a = 0;
+	
+	char* ii = compressedStr(encodedStr(ans, str, k));
+	while(ii[a] != '\0'){
+		printf("%s\n",bin(ii[a]));
+		a++;
 	}
-	puts(result(ans, str, k));
 	
 	
 	return 0;
