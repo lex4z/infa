@@ -129,6 +129,7 @@ char* decompression(char* str, el* m, int k){
 		if(f==1){
 			addBack(ans, sym);
 			code[0]='\0';
+			if(sym == '\0') break;
 		}
 		n++;
 	}
@@ -137,7 +138,7 @@ char* decompression(char* str, el* m, int k){
 }
 
 int main() {
-	char str[200] = "aa bbb cccc ddddd";
+	char str[200] = "aa bbb cccc ddd";
 	int k = 0, m[256]={0}, len = 0;
 	while(str[len] != '\0'){
 		m[str[len]]++;
