@@ -48,6 +48,11 @@ void fano(el* a, int s, int f){
 	int d = 0, l = 0;
 	float k = 0;
 	for(int i = s; i < f; i++) d += a[i].n;
+	if((float) a[s].n/d > 0.5 && f-s==2){
+		addBack(a[s].code, '0');
+		addBack(a[s+1].code, '1');
+		return;
+	}
 	for(int i = s; i < f; i++){
 		k += (float) a[i].n/d;
 		addBack(a[i].code, 48 + (k > 0.5f + 1./(d+a[i].n)));
@@ -121,7 +126,7 @@ char* decompression(char* str, el* m, int k){
 }
 
 int main() {
-	char str[200] = "123455";
+	char str[200] = "aa bbb ccddddd";
 	int k = 0, m[256]={0}, len = 0;
 	while(str[len] != '\0'){
 		m[str[len]]++;
@@ -153,9 +158,10 @@ int main() {
 		if(f) break;
 	}
 	
+	for(int i = 0; i < k; i++)printf("%c - %d\n",ans[i].c, ans[i].n);
 	fano(ans,0,k);
-	
 	for(int i = 0; i < k; i++)printf("%c - %s\n",ans[i].c, ans[i].code);
+	
 	
 	puts(encodedStr(ans, str, k));
 	char* ii = compressedStr(encodedStr(ans, str, k));
