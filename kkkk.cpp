@@ -10,7 +10,6 @@ char areEqual(char* s1, char* s2){
 	int n = 0;
 	while(s1[n] + s2[n] != 0 && s1[n] == s2[n]) n++;
 	return (s1[n]=='\0' && s2[n]=='\0');
-	
 }
 
 unsigned char binToChar(char* s){
@@ -56,7 +55,7 @@ void fano(el* a, int s, int f){
 		for(int i = s; i < f; i++){
 			k += (float) a[i].n/d;
 			addBack(a[i].code, 48 + (k > 0.5f + 1./(d*2)));
-			l += 1 - (k > 0.5f + 1./(d*2));
+			l += k <= 0.5f + 1./(d*2);
 		}
 	}
 	
@@ -68,6 +67,7 @@ void fano(el* a, int s, int f){
 char* encodedStr(el* n, char* str, int k){
 	char* ans = new char[200];
 	int i = 0;
+	ans[0] = '\0';
 	while(str[i] != '\0'){
 		for(int j = 0; j < k; j++) {
 			if(n[j].c == str[i]){
@@ -92,7 +92,7 @@ char* compressedStr(char* str){
 	char t[8]="";
 	while(str[len]!='\0') len++;
 	char* ans = new char[len/8+2];
-	
+	ans[0] = '\0';
 	for(int i = 0; i < len/8 + 1; i++){
 		char f = 0;
 		for(int j = 0; j < 8; j++){
@@ -101,7 +101,7 @@ char* compressedStr(char* str){
 		} 
 		addBack(ans, binToChar(t));
 	}
-
+	
 	ans[len/8+1]='\0';
 	return ans;
 }
@@ -110,6 +110,7 @@ char* decompression(char* str, el* m, int k){
 	char* ans = new char[200];
 	char t[200] = "", code[20] = "";
 	int n = 0;
+	ans[0] = '\0';
 	while(str[n] != '\0'){
 		strSum(t, bin(str[n]));
 		n++;
@@ -136,7 +137,7 @@ char* decompression(char* str, el* m, int k){
 }
 
 int main() {
-	char str[200] = "asdfghjk";
+	char str[200] = "aa bbb cccc ddddd";
 	int k = 0, m[256]={0}, len = 0;
 	while(str[len] != '\0'){
 		m[str[len]]++;
@@ -144,7 +145,7 @@ int main() {
 	}
 	m[0]++;
 	
-	for(int i = 0; i < 256; i++)if(m[i] != 0) k++;
+	for(int i = 0; i < 256; i++) if(m[i] != 0) k++;
 	el* ans = new el[k];
 	int h = 0;
 	for(int i = 0; i < 256; i++){
@@ -179,6 +180,7 @@ int main() {
 		printf("%s\n", bin(ii[a]));
 		a++;
 	}
+	puts(ii);
 	puts(decompression(compressedStr(encodedStr(ans, str, k)),ans,k));
 	
 	return 0;

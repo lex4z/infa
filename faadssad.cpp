@@ -108,7 +108,7 @@ void fano(p* a, int s, int f, int k = 1){
 	for(int i = s; i < f; i++) sum1+=a[i].f;
 	for(int i = s; i < f; i++){
 		sum2+=a[i].f;
-		a[i].n[k-1] =  49 -  (sum1/2>sum2-sum1/(20/k));
+		a[i].n[k-1] =  49 -  (sum1/2>sum2-sum1/(21/k));
 		e += (sum1/2>sum2-sum1/(20/k));
 	}
 	fano(a,s,e,k+1);
