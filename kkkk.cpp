@@ -138,7 +138,7 @@ char* decompression(char* str, el* m, int k){
 }
 
 int main() {
-	char str[200] = "aa bbb cccc ddd";
+	char str[200] = "aa bbb cccc dddddddd";
 	int k = 0, m[256]={0}, len = 0;
 	while(str[len] != '\0'){
 		m[str[len]]++;
