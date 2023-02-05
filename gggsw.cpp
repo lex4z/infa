@@ -24,7 +24,6 @@ int main() {
 	while(a[i]!='\0')i++;
 	while(b[j]!='\0')j++;
 	if(i>j){
-		
 		for(int k = 0; k < i+1; k++){
 			if(j>=k) b[i-k]=b[j-k];
 			else b[i-k]='0';
