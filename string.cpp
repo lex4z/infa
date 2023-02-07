@@ -3,9 +3,8 @@
 class String {
 private:
 	char* str;
-public:
 	int Length;
-
+public:
 	String(int length) {
 		str = new char[length + 1];
 		Length = length;
@@ -34,46 +33,86 @@ public:
 		for (int i = 0; i < n + 1; i++) str[i] = s[i];
 		str[n] = '\0';
 	}
-
-
+	
+	//destructior
 	~String() {
 		
 	}
-
+	
+	int find(char c){
+		for(int i = 0; i < this->Length; i++) if((*this)[i] == c) return i;
+		return -1;
+	}
+	
+	//finding subString in main string, returns first index of subString in main string
+	int find(String subString){
+		int t = 0;
+		for(int i = 0; i < this->Length - subString.Length + 1; i++) {
+			String temp = "";
+			for(int j =0; j < subString.Length; j ++)temp = temp + (*this)[j+i];
+			printf("%s\n",temp.str);
+			if(temp == subString) return i;
+		}
+		return -1;
+	}
+	
+	int toInt() {
+		int ans = 0;
+		for(int i = 0; i < this->Length; i++) {
+			if((*this).str[i]<'0' || (*this).str[i] >'9') throw "the string is not integer number!";
+			ans = ans * 10 + (*this).str[i] - 48;
+		}
+		return ans;
+	}
+	
 	void Print() {
 		for (int i = 0; i < Length; i++) printf("%c", str[i]);
 		printf("\n");
 	}
-
-
-	char operator[] (int i) {
-		if (i < Length)  return str[i];
+	
+	String operator[] (int i) {
+		if (i < Length)  return String(str[i]);
 		else throw "index is out of bounds";
 	}
-
+	
 	String operator+(String s2) {
 		String temp = String(Length + s2.Length);
 		for (int i = 0; i < Length; i++) temp.str[i] = str[i];
-		for (int i = 0; i < s2.Length; i++) temp.str[Length + i] = s2[i];
+		for (int i = 0; i < s2.Length; i++) temp.str[Length + i] = s2.str[i];
 		return temp;
 	}
-
+	
 	String operator*(int n) {
 		String temp = String("");
 		for (int i = 0; i < n; i++)temp = temp + *this;
 		return temp;
 	}
+	
+	bool operator==(String s2){
+		int n = 0;
+		while (str[n] + s2.str[n] != 0 && str[n] == s2.str[n]) n++;
+		return (str[n] == '\0' && s2.str[n] == '\0') && Length == s2.Length;
+	}
+	
+	int getLength(){
+		return Length;
+	}
+	
+	char* getText(){
+		return str;
+	}	
 };
 
 int main() {
-	String s1 = "12345";
+	String s1 = "123455555";
 	String s2 = "55555";
 	s1.Print();
 	s2.Print();
 	String s3 = s1 * 3;
 	s3.Print();
-
-	printf("%c", s1[4]);
+	
+	
+	printf("%d", s1.toInt());
 
 	return 0;
 }
