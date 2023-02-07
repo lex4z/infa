@@ -22,7 +22,6 @@ public:
 		str = new char[n + 1];
 		Length = n;
 		for (int i = 0; i < n + 1; i++) str[i] = s[i];
-		str[n] = '\0';
 	}
 
 	String(char* s) {
@@ -31,7 +30,6 @@ public:
 		str = new char[n + 1];
 		Length = n;
 		for (int i = 0; i < n + 1; i++) str[i] = s[i];
-		str[n] = '\0';
 	}
 	
 	//destructior
@@ -50,7 +48,6 @@ public:
 		for(int i = 0; i < this->Length - subString.Length + 1; i++) {
 			String temp = "";
 			for(int j =0; j < subString.Length; j ++)temp = temp + (*this)[j+i];
-			printf("%s\n",temp.str);
 			if(temp == subString) return i;
 		}
 		return -1;
@@ -63,11 +60,6 @@ public:
 			ans = ans * 10 + (*this).str[i] - 48;
 		}
 		return ans;
-	}
-	
-	void Print() {
-		for (int i = 0; i < Length; i++) printf("%c", str[i]);
-		printf("\n");
 	}
 	
 	String operator[] (int i) {
@@ -91,7 +83,7 @@ public:
 	bool operator==(String s2){
 		int n = 0;
 		while (str[n] + s2.str[n] != 0 && str[n] == s2.str[n]) n++;
-		return (str[n] == '\0' && s2.str[n] == '\0') && Length == s2.Length;
+		return n == Length && n == s2.Length;
 	}
 	
 	int getLength(){
@@ -100,19 +92,19 @@ public:
 	
 	char* getText(){
 		return str;
-	}	
+	}
 };
 
 int main() {
 	String s1 = "123455555";
 	String s2 = "55555";
-	s1.Print();
-	s2.Print();
+	printf("%s\n", s1.getText());
+	printf("%s\n", s2.getText());
 	String s3 = s1 * 3;
-	s3.Print();
+	printf("%s\n", s3.getText());
 	
 	
-	printf("%d", s1.toInt());
+	printf("%d", s1.find("555"));
 
 	return 0;
 }
