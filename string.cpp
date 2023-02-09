@@ -5,6 +5,12 @@ private:
 	char* str;
 	int Length;
 public:
+	
+	String(){
+		str = new char[1];
+		Length = 0;
+	}
+	
 	String(int length) {
 		str = new char[length + 1];
 		Length = length;
@@ -37,14 +43,8 @@ public:
 		
 	}
 	
-	int find(char c){
-		for(int i = 0; i < this->Length; i++) if((*this)[i] == c) return i;
-		return -1;
-	}
-	
 	//finding subString in main string, returns first index of subString in main string
 	int find(String subString){
-		int t = 0;
 		for(int i = 0; i < this->Length - subString.Length + 1; i++) {
 			String temp = "";
 			for(int j =0; j < subString.Length; j ++)temp = temp + (*this)[j+i];
@@ -60,6 +60,19 @@ public:
 			ans = ans * 10 + (*this).str[i] - 48;
 		}
 		return ans;
+	}
+
+	int count(String subString){
+		int n = 0;
+		for(int i = 0; i < this->Length - subString.Length + 1; i++) {
+			String temp = "";
+			for(int j =0; j < subString.Length; j ++)temp = temp + (*this)[j+i];
+			if(temp == subString){
+				i+=subString.Length-1;
+				n++;
+			} 
+		}
+		return n;
 	}
 	
 	String operator[] (int i) {
@@ -104,7 +117,7 @@ int main() {
 	printf("%s\n", s3.getText());
 	
 	
-	printf("%d", s1.find("555"));
+	printf("%d\n", s1.count('5'));
 
 	return 0;
 }
