@@ -21,36 +21,46 @@ int strToNum(char* s) {
 	return ans;
 }
 
-void createDB(person* db, int* dbSize){
-	for (int i = 0; i < 10; i++) db[i] = {};
+void createDB(FILE* db, int* dbSize){
 	*dbSize = 0;
 }
 
-void addLineDB(person* db, int* dbSize){
+void addLineDB(FILE* db, int* dbSize){
+	person temp;
 	printf("Имя(латиницей):");
-	scanf("%s",db[*dbSize].name);
+	scanf("%s",temp.name);
 	printf("Фамилия(латиницей):");
-	scanf("%s", db[*dbSize].surname);
+	scanf("%s", temp.surname);
 	printf("Номер:");
-	scanf("%d", &db[*dbSize].phone);
+	scanf("%d", &temp.phone);
+	fseek(db, sizeof(temp)*(*dbSize) + sizeof(int) + 1, SEEK_SET);
+	fwrite(&temp, sizeof(temp), 1, db);
 	*dbSize = *dbSize + 1;
 }
 
-void findLineDB(person* db, int dbSize){
+void findLineDB(FILE* f, int dbSize){
 	char temp[10];
+	person db;
 	scanf("%s", temp);
+	fseek(f, sizeof(int) + 1, SEEK_SET);
 	for (int i = 0; i < dbSize; i++) {
-		if (areEqual(temp, db[i].name) || areEqual(temp, db[i].surname) || strToNum(temp) == db[i].phone) {
-			printf("%d | %s\t%s\t%d\n", i + 1 , db[i].name, db[i].surname, db[i].phone);
+		fread(&db, sizeof(person), 1, f);
+		if (areEqual(temp, db.name) || areEqual(temp, db.surname) || strToNum(temp) == db.phone) {
+			printf("%d | %s\t%s\t%d\n", i + 1 , db.name, db.surname, db.phone);
 		}
 	}
 }
 
-void printDB(person* db, int dbSize){
-	for (int i = 0; i < dbSize; i++) printf("%d | %s\t%s\t%d\n",i+1 , db[i].name, db[i].surname, db[i].phone);
+void printDB(FILE* f, int dbSize){
+	person db;
+	fseek(f, sizeof(int) + 1, SEEK_SET);
+	for (int i = 0; i < dbSize; i++) {
+		fread(&db, sizeof(person), 1, f);
+		printf("%d | %s\t%s\t%d\n",i+1 , db.name, db.surname, db.phone);
+	}
 }
 
-void editLineDB(person* db, int dbSize){
+void editLineDB(FILE* f, int dbSize){
 	int lineNum, actionNum;
 	printf("Укажите номер строчки:");
 	do{
@@ -58,24 +68,29 @@ void editLineDB(person* db, int dbSize){
 		if(lineNum > dbSize) printf("введите номер существующей строчки\n:");
 	}while(lineNum > dbSize || lineNum < 0);
 	printf("Укажите что хотите изменить\n1)Имя\n2)Фамилия\n3)Номер\n");
+	fseek(f, sizeof(int) + 1 + sizeof(person)*(lineNum-1), SEEK_SET);
+	person db;
+	fread(&db, sizeof(person), 1, f);
+	fseek(f, -sizeof(person),SEEK_CUR);
 	do {
 		printf(":");
 		scanf("%d", &actionNum);
 		switch (actionNum) {
 			case 1:
 				printf("Новое имя:");
-				scanf("%s", db[lineNum-1].name);
+				scanf("%s", db.name);
 				break;
 			case 2:
 				printf("Новая фамилия:");
-				scanf("%s", db[lineNum-1].surname);
+				scanf("%s", db.surname);
 				break;
 			case 3:
 				printf("Новый номер:");
-				scanf("%d", &db[lineNum-1].phone);
+				scanf("%d", &db.phone);
 				break;
 		}
 	} while (actionNum>3 || actionNum < 0);
+	fwrite(&db,sizeof(person),1,f);
 }
 
 void deleteLineDB(person* db, int* dbSize){
@@ -134,35 +149,32 @@ void sortDB(person* db, int dbSize, int sortingColumn){
 
 int main() {
 	setlocale(LC_ALL, "RUS");
-	int actionNum, size = 3;
-	P[1] = {"Petr","Petrov",45600};
-	P[2] = {"Papus", "Yatonu", 999};
+	int actionNum, size = 0;
 	FILE* f = fopen("DB.txt", "r+");
 	
-	createDB(P, &size);
 	fscanf(f, "%d",&size);
-	fseek(f, 1, SEEK_CUR);
-	fread(P, sizeof(P), 1, f);
+	fseek(f, sizeof(int) + 1, SEEK_SET);
 	
 	do
 	{
 		puts("1. Создать новую БД\n2. Добавить запись\n3. Поиск\n4. Вывод\n5. Изменить\n6. Удалить\n7. Сортировка\n8. Выход");
 		scanf("%d", &actionNum);
+		fseek(f, sizeof(int) + 1, SEEK_SET);
 		switch (actionNum){
 		case 1:
-			createDB(P, &size);
+			size = 0;
 			break;
 		case 2:
-			addLineDB(P, &size);
+			addLineDB(f, &size);
 			break;
 		case 3:
-			findLineDB(P, size);
+			findLineDB(f, size);
 			break;
 		case 4:
-			printDB(P, size);
+			printDB(f, size);
 			break;
 		case 5:
-			editLineDB(P, size);
+			editLineDB(f, size);
 			break;
 		case 6:
 			deleteLineDB(P, &size);
@@ -178,7 +190,6 @@ int main() {
 	
 	fseek(f, 0, SEEK_SET);
 	fprintf(f, "%d ",size);
-	fwrite(P, sizeof(P), 1, f);
 	
     return 0;
 }
