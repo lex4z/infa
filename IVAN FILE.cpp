@@ -21,10 +21,6 @@ int strToNum(char* s) {
 	return ans;
 }
 
-void createDB(FILE* db, int* dbSize){
-	*dbSize = 0;
-}
-
 void addLineDB(FILE* db, int* dbSize){
 	person temp;
 	printf("Имя(латиницей):");
