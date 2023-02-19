@@ -93,56 +93,73 @@ void editLineDB(FILE* f, int dbSize){
 	fwrite(&db,sizeof(person),1,f);
 }
 
-void deleteLineDB(person* db, int* dbSize){
+void deleteLineDB(FILE* f, int* dbSize){
 	int lineNum;
+	person t;
 	printf("Укажите номер строчки:");
 	scanf("%d",&lineNum);
-	for(int i = lineNum - 1; i < *dbSize; i++) db[i] = db[i+1];
+	fseek(f, sizeof(int)+1 + sizeof(person)*lineNum, SEEK_SET);
+	for(int i = 0; i < *dbSize - lineNum; i++){
+		fread(&t, sizeof(person), 1, f);
+		fseek(f, -sizeof(person)*2, SEEK_CUR);
+		fwrite(&t, sizeof(person), 1, f);
+		fseek(f, sizeof(person), SEEK_CUR);
+	}
 	*dbSize = *dbSize - 1;
 }
 
-void sortDB(person* db, int dbSize, int sortingColumn){
+void sortDB(FILE* f, int dbSize, int sortingColumn){
 	char** t = new char*[dbSize];
+	person db;
+	fseek(f, sizeof(int) + 1, SEEK_SET);
 	for(int i = 0; i < dbSize; i++){
+		fread(&db, sizeof(person), 1, f);
 		switch (sortingColumn) {
 			case 1:
-				t[i] = db[i].name;
+				t[i] = db.name;
 				break;
 			case 2:
-				t[i] = db[i].surname;
+				t[i] = db.surname;
 				break;
 			case 3:
 				char* temp = new char[10];
-				for(int i = 0; i < 10; i++) temp[i]='0';
-				int e = db[i].phone, n = 0;
+				for(int j = 0; j < 10; j++) temp[i]='0';
+				int e = db.phone, n = 0;
 				while(e){
 					e/=10;
 					n++;
 				}
-				e = db[i].phone;
-				for(int i = 0; i  < n; i++){
-					temp[9-i] = temp[9 - i] +  e%10;
+				e = db.phone;
+				for(int j = 0; j  < n; j++){
+					temp[9-j] = temp[9 - j] +  e%10;
 					e/=10;
 				}
 				t[i] = temp;
 				break;
 		}
 	}
-		char f = 0;
+		char flag;
 		for (int i = 0; i < dbSize - 1; i ++) {
-			f = 0;
+			flag = 1;
 			for (int j = 0; j < dbSize - i - 1; j ++) {
 				int k = 0;
+				fseek(f, sizeof(int) + 1 + sizeof(person)*j, SEEK_SET);
 				while(t[j][k] == t[j+1][k] && t[j][k] + t[j+1][k] != 0) k++;
 				if(t[j][k] == 0 || t[j][k] > t[j+1][k]) {
-					person temp = db[j];
-					db[j] = db[j + 1];
-					db[j + 1] = temp;
-					f = 1;
+					char* p = t[j];
+					t[j] = t[j+1];
+					t[j+1] = p;
+					person temp1,temp2;
+					fread(&temp1, sizeof(person), 1, f);
+					fread(&temp2, sizeof(person), 1, f);
+					fseek(f, -sizeof(person)*2, SEEK_CUR);
+					fwrite(&temp2, sizeof(person), 1, f);
+					fwrite(&temp1, sizeof(person), 1, f);
+					flag = 0;
 				}
 				
 			}
-			if (!f) break;
+			if (flag) break;
 		}
 	
 }
@@ -159,7 +176,8 @@ int main() {
 	{
 		puts("1. Создать новую БД\n2. Добавить запись\n3. Поиск\n4. Вывод\n5. Изменить\n6. Удалить\n7. Сортировка\n8. Выход");
 		scanf("%d", &actionNum);
-		fseek(f, sizeof(int) + 1, SEEK_SET);
+		fseek(f, 0, SEEK_SET);
+		fprintf(f, "%d ",size);
 		switch (actionNum){
 		case 1:
 			size = 0;
@@ -177,19 +195,18 @@ int main() {
 			editLineDB(f, size);
 			break;
 		case 6:
-			deleteLineDB(P, &size);
+			deleteLineDB(f, &size);
 			break;
 		case 7:
 			int columnNum;
 			printf("Укажите столбец по которому сортировать\n1)Имя\n2)Фамилия\n3)Номер\n:");
 			scanf("%d",&columnNum);
-			sortDB(P, size, columnNum);
+			sortDB(f, size, columnNum);
 			break;
 		}
 	} while (actionNum != 8);
 	
-	fseek(f, 0, SEEK_SET);
-	fprintf(f, "%d ",size);
+	
 	
     return 0;
 }
