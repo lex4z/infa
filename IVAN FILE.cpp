@@ -109,17 +109,17 @@ void sortDB(FILE* f, int dbSize, int sortingColumn){
 	person db;
 	fseek(f, sizeof(int) + 1, SEEK_SET);
 	for(int i = 0; i < dbSize; i++){
+		char* temp = new char[10];
 		fread(&db, sizeof(person), 1, f);
 		switch (sortingColumn) {
 			case 1:
-				t[i] = db.name;
+				for(int j = 0; j < 10; j++) temp[j] = db.name[j];
 				break;
 			case 2:
-				t[i] = db.surname;
+				for(int j = 0; j < 10; j++) temp[j] = db.surname[j];
 				break;
 			case 3:
-				char* temp = new char[10];
-				for(int j = 0; j < 10; j++) temp[i]='0';
+				for(int j = 0; j < 10; j++) temp[j]= '0';
 				int e = db.phone, n = 0;
 				while(e){
 					e/=10;
@@ -133,30 +133,34 @@ void sortDB(FILE* f, int dbSize, int sortingColumn){
 				t[i] = temp;
 				break;
 		}
+		t[i] = temp;
 	}
-		char flag;
-		for (int i = 0; i < dbSize - 1; i ++) {
-			flag = 1;
-			for (int j = 0; j < dbSize - i - 1; j ++) {
-				int k = 0;
-				fseek(f, sizeof(int) + 1 + sizeof(person)*j, SEEK_SET);
-				while(t[j][k] == t[j+1][k] && t[j][k] + t[j+1][k] != 0) k++;
-				if(t[j][k] == 0 || t[j][k] > t[j+1][k]) {
-					char* p = t[j];
-					t[j] = t[j+1];
-					t[j+1] = p;
-					person temp1,temp2;
-					fread(&temp1, sizeof(person), 1, f);
-					fread(&temp2, sizeof(person), 1, f);
-					fseek(f, -sizeof(person)*2, SEEK_CUR);
-					fwrite(&temp2, sizeof(person), 1, f);
-					fwrite(&temp1, sizeof(person), 1, f);
-					flag = 0;
-				}
-				
+
+	char flag;
+	for (int i = 0; i < dbSize - 1; i ++) {
+		flag = 1;
+		
+		for (int j = 0; j < dbSize - i - 1; j ++) {
+			int k = 0;
+			fseek(f, sizeof(int) + 1 + sizeof(person)*j , SEEK_SET);
+			while(t[j][k] == t[j+1][k] && t[j][k] + t[j+1][k] != 0) k++;
+			if(t[j][k] == 0 || t[j][k] > t[j+1][k]) {
+				char* p = t[j];
+				t[j] = t[j+1];
+				t[j+1] = p;
+				person temp1,temp2;
+				fread(&temp1, sizeof(person), 1, f);
+				fread(&temp2, sizeof(person), 1, f);
+				fseek(f, -sizeof(person)*2, SEEK_CUR);
+				fwrite(&temp2, sizeof(person), 1, f);
+				fwrite(&temp1, sizeof(person), 1, f);
+				flag = 0;
 			}
-			if (flag) break;
+			
 		}
+		if (flag) break;
+	}
+		
 	
 }
 
@@ -195,8 +199,11 @@ int main() {
 			break;
 		case 7:
 			int columnNum;
-			printf("Укажите столбец по которому сортировать\n1)Имя\n2)Фамилия\n3)Номер\n:");
-			scanf("%d",&columnNum);
+			printf("Укажите столбец по которому сортировать\n1)Имя\n2)Фамилия\n3)Номер\n");
+			do {
+				printf(":");
+				scanf("%d",&columnNum);
+			} while (columnNum>3 || columnNum < 0);
 			sortDB(f, size, columnNum);
 			break;
 		}
