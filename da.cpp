@@ -8,7 +8,7 @@ void k(int n){
 }
 
 int main() {
-	k(12345);
+	
 	
 	return 0;
 }
