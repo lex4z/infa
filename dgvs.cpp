@@ -51,7 +51,6 @@ int main() {
 				break;
 		}
 		if(ch!=8) scanf("%d",&t);
-		//printf("%d\n",j);
 		if(res == t){
 			printf("da\n");
 		}
