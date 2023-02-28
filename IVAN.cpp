@@ -137,12 +137,7 @@ int main() {
 	int actionNum, size = 3;
 	P[1] = {"Petr","Petrov",45600};
 	P[2] = {"Papus", "Yatonu", 999};
-	FILE* f = fopen("DB.txt", "r+");
-	
-	createDB(P, &size);
-	fscanf(f, "%d",&size);
-	fseek(f, 1, SEEK_CUR);
-	fread(P, sizeof(P), 1, f);
+
 	
 	do
 	{
@@ -176,9 +171,6 @@ int main() {
 		}
 	} while (actionNum != 8);
 	
-	fseek(f, 0, SEEK_SET);
-	fprintf(f, "%d ",size);
-	fwrite(P, sizeof(P), 1, f);
 	
     return 0;
 }

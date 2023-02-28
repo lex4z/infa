@@ -4,7 +4,7 @@ struct person {
 	char name[10];
 	char surname[10];
 	int phone;
-}P[100] = { "Ivan", "Ivanov", 245 };
+};
 
 char areEqual(char* s1, char* s2) {
 	int n = 0;
