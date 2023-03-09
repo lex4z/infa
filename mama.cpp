@@ -17,7 +17,7 @@ int main() {
 	printf("min:'%c'\tmax:'%c'\t\n",minNig,maxNig);
 
 	unsigned char k = 0;
-	for(int i = 0; i < 256; i++){
+	for(int i = minNig; i < maxNig+1; i++){
 		if(niggers[i] == niggers[minNig]) {
 			niggers[k] = i;
 			k++;
