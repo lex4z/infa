@@ -1,8 +1,5 @@
 #include <stdio.h>
-struct l{
-	int ch;
-	int n;
-};
+
 int niggers[256];
 
 int main() {
