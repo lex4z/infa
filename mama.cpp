@@ -15,8 +15,7 @@ int main() {
 		else if(niggers[minNig] == niggers[i]) maxNig = i;
 	}
 	printf("min:'%c'\tmax:'%c'\t\n",minNig,maxNig);
-	
-	int n = 0;
+
 	unsigned char k = 0;
 	for(int i = 0; i < 256; i++){
 		if(niggers[i] == niggers[minNig]) {
@@ -24,14 +23,13 @@ int main() {
 			k++;
 			printf("%c\t",i);
 		}
-		n++;
 	}
 	
 	fseek(f, 0, SEEK_SET);
 	
 	char flag = 1;
 	while((ch = getc(f)) != EOF){
-		for(int i = 0; i < n; i++){
+		for(int i = 0; i < k; i++){
 			if(ch == niggers[i]){
 				if(flag) minNig = ch;
 				maxNig = ch;
