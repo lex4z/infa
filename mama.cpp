@@ -6,7 +6,7 @@ int main() {
 	int ch;
 	FILE* f = fopen("mama.txt", "r");
 	
-	while((ch = getc(f)) != EOF)niggers[ch]++;
+	while((ch = getc(f)) != EOF) niggers[ch]++;
 	
 	int maxNig, minNig = 0;
 	for(int i = 0; i < 256; i++){
@@ -31,9 +31,11 @@ int main() {
 	while((ch = getc(f)) != EOF){
 		for(int i = 0; i < k; i++){
 			if(ch == niggers[i]){
-				if(flag) minNig = ch;
+				if(flag) {
+					minNig = ch;
+					flag = 0;
+				}
 				maxNig = ch;
-				flag = 0;
 			}
 			
 		}
