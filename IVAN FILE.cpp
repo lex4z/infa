@@ -139,7 +139,6 @@ void sortDB(FILE* f, int dbSize, int sortingColumn){
 	char flag;
 	for (int i = 0; i < dbSize - 1; i ++) {
 		flag = 1;
-		
 		for (int j = 0; j < dbSize - i - 1; j ++) {
 			int k = 0;
 			fseek(f, sizeof(int) + 1 + sizeof(person)*j , SEEK_SET);
@@ -210,7 +209,7 @@ int main() {
 	} while (actionNum != 8);
 	
 	
-	
+
     return 0;
 }
 
