@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int niggers[256];
+int niggers[255];
 
 int main() {
 	int ch;
@@ -9,18 +9,17 @@ int main() {
 	while((ch = getc(f)) != EOF) niggers[ch]++;
 	
 	int maxNig, minNig = 0;
-	for(int i = 0; i < 256; i++){
+	for(int i = 0; i < 255; i++){
 		if(niggers[i]) printf("%c: %d\n",i,niggers[i]);
 		if(niggers[minNig] < niggers[i]) minNig = i;
 		else if(niggers[minNig] == niggers[i]) maxNig = i;
 	}
-	printf("min:'%c'\tmax:'%c'\t\n",minNig,maxNig);
+	printf("min:'%c'\tmax:'%c'\t\n", minNig, maxNig);
 
 	unsigned char k = 0;
-	for(int i = minNig; i < maxNig+1; i++){
+	for(int i = minNig; i < maxNig + 1; i++){
 		if(niggers[i] == niggers[minNig]) {
-			niggers[k] = i;
-			k++;
+			niggers[k++] = i;
 			printf("%c\t",i);
 		}
 	}
@@ -41,5 +40,5 @@ int main() {
 		}
 	}
 	printf("\nfirst:'%c'\tlast:'%c'\t\n",minNig,maxNig);
-	
+	return 0;
 }
