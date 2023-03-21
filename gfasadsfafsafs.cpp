@@ -14,8 +14,7 @@ void addBack(char* str, char c){
     str[n+1]='\0';
 }
 
-void sort(node* p, int size)
-{
+void sort(node* p, int size) {
     for(int i=0; i < size - 1; i++){
         for (int j = 0; j < size - i - 1; j++){
                 if (p[j].n < p[j + 1].n){
@@ -28,7 +27,7 @@ void sort(node* p, int size)
 }
 
 
-void shannon(node* m, int first, int second){
+void shannon(node* m, int first, int second) {
     if(second - first < 2) return;
     int summ = 0, k = 0;
     float s = 0;
@@ -64,9 +63,8 @@ int main(){
     node* p = new node[length];
     
     int k = 0;
-    for(int i = 0; i < 256; i++)
-    {
-        if(probability[i] != 0){
+    for(int i = 0; i < 256; i++) {
+        if(probability[i] != 0) {
             p[k].symbol = i;
             p[k].n = probability[i];
             k++;
