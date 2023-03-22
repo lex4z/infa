@@ -30,26 +30,15 @@ int main() {
 	el* m = new el[k];
 	for(int i = 0; i < 255; i++){
 		if(bart[i]) {
-			//printf("%c: %d\n",i,bart[i]);
-			el* t = new el[k++];
+			el* t = new el[++k];
 			for(int j = 0; j < k-1; j++) t[j]=m[j];
 			t[k-1].c = i;
 			t[k-1].n = bart[i];
-			delete [] m;
+			delete[] m;
 			m = t;
 		}
 	}
-	
-	//el* m = new el[k];
-	//k = 0;
-	/*
-	for(int i = 0; i < 255; i++){
-		if(bart[i]){
-			m[k].c = i;
-			m[k].n = bart[i];
-		}
-	}
-	*/
+
 	for(int i = 0; i < k -1; i++){
 		for(int j = 0; j < k - i - 1; j++){
 			if(m[j].n < m[j+1].n){
