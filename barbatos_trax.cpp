@@ -3,8 +3,7 @@
 struct el{
 	char c;
 	int n;
-	el* parent;
-	char left;
+	char code[20];
 };
 
 int bart[255];
@@ -23,6 +22,23 @@ char* bin(unsigned char c){
 	return s;
 }
 
+void generateCodes(el* m, int s, int e){
+	if(e - s < 2) return;
+	int summ = 0, k = 0;
+	float probSum = 0;
+	for(int i = s; i < e; i++) summ += m[i].n;
+	for(int i = s; i < e; i++){
+		if(s<0.5){
+			addBack(m[i].code, '0');
+			k++;
+		}else addBack(m[i].code, '1');
+		s+= (float) m[i].n/summ;
+	}
+	generateCodes(m, s, s+k);
+	generateCodes(m, s+k, e);
+	
+}
+
 int main() {
 	FILE* f = fopen("mama.txt", "r");
 	int ch, k = 0;
@@ -38,8 +54,8 @@ int main() {
 			m = t;
 		}
 	}
-
-	for(int i = 0; i < k -1; i++){
+	
+	for(int i = 0; i < k - 1; i++){
 		for(int j = 0; j < k - i - 1; j++){
 			if(m[j].n < m[j+1].n){
 				el temp = m[j];
@@ -49,9 +65,7 @@ int main() {
 		}
 	}
 	
-	for(int i = 0; i < k; i++) printf("%c: %d\n",m[i].c, m[i].n);
 	
-	
-	printf("%d\n",k);
+	//printf("%d\n",k);
 	return 0;
 }
