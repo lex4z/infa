@@ -60,8 +60,6 @@ void shannon(el* m, int first, int second) {
 	}
 	shannon(m, first, first + k);
 	shannon(m, first + k,  second);
-	
-	
 }
 
 void encode(el* m, int n, FILE* s, FILE* f){
@@ -129,20 +127,34 @@ char* decode(FILE* f){
 					if(areEqual(temp, m[i].code)){
 						ans[charIndex++] = m[i].c;
 						temp[0] = '\0';
-						x = j;
+						x = j + 1;
 						break;
 					}
 				}
 				j++;
 			}
 			j = 0;
-			while(buffer[x] != '\0'){
-				buffer[j++] = buffer[x++];
-			}
+			while(buffer[x] != '\0')buffer[j++] = buffer[x++];
 			buffer[j] = '\0';
 			k = j;
 		}
 	}
+	
+	if(charIndex != strLen){
+		char temp[20] = "";
+		for(int j = 0; j < 24; j++){
+			if(charIndex == strLen) break;
+			addBack(temp, buffer[j]);
+			for(int i = 0; i < n; i++){
+				if(areEqual(temp, m[i].code)){
+					ans[charIndex++] = m[i].c;
+					temp[0] = '\0';
+					break;
+				}
+			}
+		}
+	}
+	
 	ans[strLen] = '\0';
 	return ans;
 }
@@ -183,6 +195,6 @@ int main() {
 	fclose(result);
 	result = fopen("result.txt", "r");
 	puts(decode(result));
-	//printf("%d\n",k);
+	
 	return 0;
 }
