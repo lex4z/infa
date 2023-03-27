@@ -123,7 +123,7 @@ char* decode(FILE* f){
 		if(k>=20){
 			int j = 0, x = 0;
 			char temp[20] = "";
-			while(j != 23){
+			while(j < 24){
 				addBack(temp, buffer[j]);
 				for(int i = 0; i < n; i++){
 					if(areEqual(temp, m[i].code)){
