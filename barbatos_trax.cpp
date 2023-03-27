@@ -65,7 +65,7 @@ void shannon(el* m, int first, int second) {
 void encode(el* m, int n, FILE* s, FILE* f){
 	int k = 0;
 	char buffer[30] = "";
-	unsigned char len;
+	unsigned char len = 0;
 	fseek(f, 0, SEEK_SET);
 	fwrite(&n, sizeof(n), 1, f);
 	fseek(s, 0, SEEK_SET);
@@ -160,7 +160,8 @@ char* decode(FILE* f){
 }
 
 int main() {
-	FILE* f = fopen("mama.txt", "r");
+	FILE* f; //= fopen("mama.txt", "r");
+	fopen_s(&f, "mama.txt", "r");
 	int ch, k = 0;
 	while((ch = getc(f)) != EOF) bart[ch]++;
 	el* m = new el[k];
@@ -190,10 +191,11 @@ int main() {
 	shannon(m, 0, k);
 	
 	for(int i = 0; i < k; i++) printf("%c - %s\n", m[i].c, m[i].code);
-	FILE* result = fopen("result.txt", "w");
+	FILE* result;// = fopen("result.txt", "w");
+	fopen_s(&result, "result.txt", "w");
 	encode(m, k, f, result);
 	fclose(result);
-	result = fopen("result.txt", "r");
+	fopen_s(&result, "result.txt", "r"); //result = fopen("result.txt", "r");
 	puts(decode(result));
 	
 	return 0;
