@@ -118,10 +118,9 @@ char* decode(FILE* f){
 	while((ch = getc(f)) != EOF){
 		strSum(buffer, bin(ch));
 		k+=8;
-		if(k>=20){
 			int j = 0, x = 0;
 			char temp[20] = "";
-			while(j < 24){
+			while(buffer[j] != '\0'){
 				addBack(temp, buffer[j]);
 				for(int i = 0; i < n; i++){
 					if(areEqual(temp, m[i].code)){
@@ -131,28 +130,16 @@ char* decode(FILE* f){
 						break;
 					}
 				}
+				if(charIndex == strLen) break;
 				j++;
 			}
-			j = 0;
+			if(x){
+			  j = 0;
 			while(buffer[x] != '\0')buffer[j++] = buffer[x++];
 			buffer[j] = '\0';
 			k = j;
-		}
-	}
-	
-	if(charIndex != strLen){
-		char temp[20] = "";
-		for(int j = 0; j < 24; j++){
-			if(charIndex == strLen) break;
-			addBack(temp, buffer[j]);
-			for(int i = 0; i < n; i++){
-				if(areEqual(temp, m[i].code)){
-					ans[charIndex++] = m[i].c;
-					temp[0] = '\0';
-					break;
-				}
 			}
-		}
+		
 	}
 	
 	ans[strLen] = '\0';
