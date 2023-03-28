@@ -118,27 +118,27 @@ char* decode(FILE* f){
 	while((ch = getc(f)) != EOF){
 		strSum(buffer, bin(ch));
 		k+=8;
-			int j = 0, x = 0;
-			char temp[20] = "";
-			while(buffer[j] != '\0'){
-				addBack(temp, buffer[j]);
-				for(int i = 0; i < n; i++){
-					if(areEqual(temp, m[i].code)){
-						ans[charIndex++] = m[i].c;
-						temp[0] = '\0';
-						x = j + 1;
-						break;
-					}
+		int j = 0, x = 0;
+		char temp[20] = "";
+		while(buffer[j] != '\0'){
+			addBack(temp, buffer[j]);
+			for(int i = 0; i < n; i++){
+				if(areEqual(temp, m[i].code)){
+					ans[charIndex++] = m[i].c;
+					temp[0] = '\0';
+					x = j + 1;
+					break;
 				}
-				if(charIndex == strLen) break;
-				j++;
 			}
-			if(x){
-			  j = 0;
+			if(charIndex == strLen) break;
+			j++;
+		}
+		if(x){
+			j = 0;
 			while(buffer[x] != '\0')buffer[j++] = buffer[x++];
 			buffer[j] = '\0';
 			k = j;
-			}
+		}
 		
 	}
 	
@@ -147,8 +147,8 @@ char* decode(FILE* f){
 }
 
 int main() {
-	FILE* f; //= fopen("mama.txt", "r");
-	fopen_s(&f, "mama.txt", "r");
+	FILE* f = fopen("mama.txt", "r");
+	//fopen_s(&f, "mama.txt", "r");
 	int ch, k = 0;
 	while((ch = getc(f)) != EOF) bart[ch]++;
 	el* m = new el[k];
@@ -178,11 +178,12 @@ int main() {
 	shannon(m, 0, k);
 	
 	for(int i = 0; i < k; i++) printf("%c - %s\n", m[i].c, m[i].code);
-	FILE* result;// = fopen("result.txt", "w");
-	fopen_s(&result, "result.txt", "w");
+	FILE* result = fopen("result.txt", "w");
+	//fopen_s(&result, "result.txt", "w");
 	encode(m, k, f, result);
 	fclose(result);
-	fopen_s(&result, "result.txt", "r"); //result = fopen("result.txt", "r");
+	//fopen_s(&result, "result.txt", "r"); //
+	result = fopen("result.txt", "r");
 	puts(decode(result));
 	
 	return 0;
