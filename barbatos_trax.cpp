@@ -75,7 +75,8 @@ void encode(el* m, int n, FILE* s, FILE* f){
 		k += m[i].n;
 		m[i].n = codeLen;
 		fwrite(&m[i].c, sizeof(m[i].c), 1, f);
-		fwrite(m[i].code, sizeof(m[i].c)*20, 1, f);
+		fwrite(&m[i].n, sizeof(m[i].n), 1, f);
+		fwrite(m[i].code, sizeof(m[i].c)*m[i].n, 1, f);
 	}
 	fwrite(&k, sizeof(k), 1, f);
 	int ch;
@@ -105,13 +106,15 @@ void encode(el* m, int n, FILE* s, FILE* f){
 }
 
 char* decode(FILE* f){
+	FILE* sssss = fopen("rrr.txt","w");
 	int n, strLen, ch, k = 0, charIndex = 0;
 	char buffer[60] = "";
 	fread(&n, sizeof(n), 1, f);
 	el* m = new el[n];
 	for(int i = 0; i < n; i++){
 		fread(&m[i].c, sizeof(m[i].c), 1, f);
-		fread(m[i].code, sizeof(m[i].c) * 20, 1, f);
+		fread(&m[i].n, sizeof(m[i].n), 1, f);
+		fread(m[i].code, sizeof(m[i].c) * m[i].n, 1, f);
 	}
 	fread(&strLen, sizeof(strLen), 1, f);
 	char* ans = new char[strLen + 1];
@@ -124,7 +127,8 @@ char* decode(FILE* f){
 			addBack(temp, buffer[j]);
 			for(int i = 0; i < n; i++){
 				if(areEqual(temp, m[i].code)){
-					ans[charIndex++] = m[i].c;
+					fprintf(sssss, "%c",m[i].c);
+					//ans[charIndex++] = m[i].c;
 					temp[0] = '\0';
 					x = j + 1;
 					break;
